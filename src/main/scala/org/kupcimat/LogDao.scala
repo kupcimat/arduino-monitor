@@ -1,31 +1,35 @@
 package org.kupcimat
 
-import java.sql.Connection
+import java.sql.{Connection, Statement}
 
 class LogDao(connection: Connection) {
 
-  val ddl = connection.createStatement()
-  ddl.execute("CREATE TABLE log (timestamp TIMESTAMP, value INT)")
-  ddl.close()
+  // TODO temporary, need permanent solution
+  createLogTable()
 
-  def saveLog(log: Log): Unit = {
-    val statement = connection.createStatement()
-    statement.execute(s"INSERT INTO log VALUES ('${log.timestamp}', ${log.value})")
-    statement.close()
+  def createLogTable(): Unit = withStatement {
+    statement => statement.execute("CREATE TABLE log (timestamp TIMESTAMP, value INT)")
   }
 
-  def getAllLogs: List[Log] = {
-    val statement = connection.createStatement()
-    val result = statement.executeQuery("SELECT * FROM log")
+  def saveLog(log: Log): Unit = withStatement {
+    statement => statement.executeUpdate(s"INSERT INTO log VALUES ('${log.timestamp}', ${log.value})")
+  }
 
-    // TODO
+  def getAllLogs: List[Log] = withStatement { statement =>
+    val result = statement.executeQuery("SELECT * FROM log")
+    // TODO find more elegant solution?
     var logs = List[Log]()
     while (result.next()) {
       logs = Log(result.getString("timestamp"), result.getInt("value")) :: logs
     }
-    result.close()
-    statement.close()
 
     logs
+  }
+
+  def withStatement[T](execution: Statement => T): T = {
+    val statement = connection.createStatement()
+    val result = execution(statement)
+    statement.close()
+    result
   }
 }

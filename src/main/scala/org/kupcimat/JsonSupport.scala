@@ -1,7 +1,7 @@
 package org.kupcimat
 
 import spray.httpx.SprayJsonSupport
-import spray.json._
+import spray.json.DefaultJsonProtocol
 
 case class Log(timestamp: String, value: Int)
 
