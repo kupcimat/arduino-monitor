@@ -28,6 +28,9 @@ trait LogService extends HttpService {
 
   val logRoute: Route =
     path("log") {
+      get {
+        complete(logDao.getAllLogs)
+      } ~
       post {
         entity(as[Log]) { log =>
           logDao.saveLog(log)
@@ -37,10 +40,10 @@ trait LogService extends HttpService {
         }
       }
     } ~
-    path("log") {
-      get {
-        complete(logDao.getAllLogs)
-      }
+    path("") {
+      getFromResource("web/index.html")
+    } ~ {
+      getFromResourceDirectory("web")
     }
 
   val handledExceptionsRoute =
