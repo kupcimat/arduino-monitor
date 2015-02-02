@@ -18,9 +18,9 @@ class LogServiceActor extends Actor with LogService {
 
 trait LogService extends HttpService {
 
-  // TODO
+  // TODO create property file
   Class.forName("org.h2.Driver")
-  val logDao = new LogDao(DriverManager.getConnection("jdbc:h2:mem:test"))
+  val logDao = new LogDao(DriverManager.getConnection("jdbc:h2:~/arduino-monitor;INIT=runscript from 'db/create.sql'"))
 
   val exceptionHandler = ExceptionHandler {
     case e: Exception => complete(StatusCodes.InternalServerError, e.getMessage)

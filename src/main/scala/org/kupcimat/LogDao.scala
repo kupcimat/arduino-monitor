@@ -4,13 +4,6 @@ import java.sql.{Connection, Statement}
 
 class LogDao(connection: Connection) {
 
-  // TODO temporary, need permanent solution
-  createLogTable()
-
-  def createLogTable(): Unit = withStatement {
-    statement => statement.execute("CREATE TABLE log (timestamp TIMESTAMP, value INT)")
-  }
-
   def saveLog(log: Log): Unit = withStatement {
     statement => statement.executeUpdate(s"INSERT INTO log VALUES ('${log.timestamp}', ${log.value})")
   }
