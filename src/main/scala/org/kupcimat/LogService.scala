@@ -27,9 +27,12 @@ trait LogService extends HttpService {
   }
 
   val logRoute: Route =
-    path("log") {
+    path("logs") {
       get {
-        complete(logDao.getAllLogs)
+        parameter('type ! 'dataTable) {
+          complete(convertToDataTable(logDao.getAllLogs))
+        } ~
+          complete(logDao.getAllLogs)
       } ~
       post {
         entity(as[Log]) { log =>
@@ -50,4 +53,16 @@ trait LogService extends HttpService {
     handleExceptions(exceptionHandler) {
       logRoute
     }
+
+  // TODO move somewhere
+  def convertToDataTable(logs: List[Log]): DataTable = {
+    val data = logs.zipWithIndex.map {
+      case (log, index) => Row(List(Cell(index), Cell(log.value)))
+    }
+    DataTable(
+      List(
+        Column("A", "Time", "number"),
+        Column("B", "Value", "number")),
+      data)
+  }
 }

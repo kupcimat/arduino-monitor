@@ -37,7 +37,7 @@ def log(serial_port, serial_speed):
       sensor_data = create_log(percent)
 
       print('Sending sensor data: {}'.format(sensor_data))
-      send_log('http://localhost:8080/log', sensor_data)
+      send_log('http://localhost:8080/logs', sensor_data)
       log_number += 1
 
   print('Closing serial port...')
