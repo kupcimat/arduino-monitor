@@ -1,6 +1,6 @@
 package org.kupcimat
 
-import java.sql.{Connection, Statement}
+import java.sql.{Connection, DriverManager, Statement}
 
 class LogDao(connection: Connection) {
 
@@ -23,5 +23,13 @@ class LogDao(connection: Connection) {
     val result = execution(statement)
     statement.close()
     result
+  }
+}
+
+object LogDao {
+  def create: LogDao = {
+    // TODO create property file
+    // Class.forName("org.h2.Driver")
+    new LogDao(DriverManager.getConnection("jdbc:h2:~/arduino-monitor;INIT=runscript from 'db/create.sql'"))
   }
 }

@@ -1,6 +1,6 @@
 package org.kupcimat
 
-import org.kupcimat.LogJsonSupport._
+import org.kupcimat.JsonSupport._
 import org.specs2.mutable.Specification
 import spray.http._
 import spray.testkit.Specs2RouteTest

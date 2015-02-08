@@ -1,9 +1,8 @@
 package org.kupcimat
 
-import java.sql.DriverManager
-
 import akka.actor.Actor
-import org.kupcimat.LogJsonSupport._
+import org.kupcimat.DataTableSupport._
+import org.kupcimat.JsonSupport._
 import spray.http._
 import spray.routing._
 
@@ -18,10 +17,7 @@ class LogServiceActor extends Actor with LogService {
 
 trait LogService extends HttpService {
 
-  // TODO create property file
-  Class.forName("org.h2.Driver")
-  val logDao = new LogDao(DriverManager.getConnection("jdbc:h2:~/arduino-monitor;INIT=runscript from 'db/create.sql'"))
-
+  val logDao = LogDao.create
   val exceptionHandler = ExceptionHandler {
     case e: Exception => complete(StatusCodes.InternalServerError, e.getMessage)
   }
@@ -30,7 +26,7 @@ trait LogService extends HttpService {
     path("logs") {
       get {
         parameter('type ! 'dataTable) {
-          complete(convertToDataTable(logDao.getAllLogs))
+          complete(logsToDataTable(logDao.getAllLogs))
         } ~
           complete(logDao.getAllLogs)
       } ~
@@ -53,16 +49,4 @@ trait LogService extends HttpService {
     handleExceptions(exceptionHandler) {
       logRoute
     }
-
-  // TODO move somewhere
-  def convertToDataTable(logs: List[Log]): DataTable = {
-    val data = logs.zipWithIndex.map {
-      case (log, index) => Row(List(Cell(index), Cell(log.value)))
-    }
-    DataTable(
-      List(
-        Column("A", "Time", "number"),
-        Column("B", "Value", "number")),
-      data)
-  }
 }
