@@ -1,7 +1,6 @@
 package org.kupcimat
 
 import akka.actor.Actor
-import org.kupcimat.DataTableSupport._
 import org.kupcimat.JsonSupport._
 import spray.http._
 import spray.routing._
@@ -25,17 +24,20 @@ trait LogService extends HttpService {
   val logRoute: Route =
     path("logs") {
       get {
-        parameter('type ! 'dataTable) {
-          complete(logsToDataTable(logDao.getAllLogs))
-        } ~
-          complete(logDao.getAllLogs)
+        complete(logDao.getAllLogs)
       } ~
       post {
         entity(as[Log]) { log =>
-          logDao.saveLog(log)
-          (1 to log.value).foreach(_ => print('|'))
-          println(s" ${log.value} %")
-          complete(StatusCodes.Created)
+          complete {
+            logDao.saveLog(log)
+            StatusCodes.Created
+          }
+        }
+      } ~
+      delete {
+        complete {
+          logDao.deleteAllLogs()
+          StatusCodes.NoContent
         }
       }
     } ~

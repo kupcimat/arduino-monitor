@@ -1,39 +1,31 @@
 package org.kupcimat
 
+import java.sql.Timestamp
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
 import spray.httpx.SprayJsonSupport
-import spray.json.DefaultJsonProtocol
+import spray.json._
 
 /**
  * Standard log format
  */
-case class Log(timestamp: String, value: Int)
-
-/**
- * Google DataTable log format
- */
-case class Cell(v: Int)
-case class Row(c: List[Cell])
-case class Column(id: String, label: String, `type`: String)
-case class DataTable(cols: List[Column], rows: List[Row])
+case class Log(timestamp: Timestamp, value: Int)
 
 object JsonSupport extends DefaultJsonProtocol with SprayJsonSupport {
-  implicit val logFormat = jsonFormat2(Log)
-  implicit val cellFormat = jsonFormat1(Cell)
-  implicit val rowFormat = jsonFormat1(Row)
-  implicit val columnFormat = jsonFormat3(Column)
-  implicit val dataTableFormat = jsonFormat2(DataTable)
-}
 
-object DataTableSupport {
-  def logsToDataTable(logs: List[Log]): DataTable = {
-    val data = logs.zipWithIndex.map {
-      // TODO return timestamps, not indexes
-      case (log, index) => Row(List(Cell(index), Cell(log.value)))
+  implicit object TimestampJsonFormat extends RootJsonFormat[Timestamp] {
+    def write(timestamp: Timestamp): JsValue = {
+      val isoDateTime = timestamp.toLocalDateTime.format(DateTimeFormatter.ISO_DATE_TIME)
+      JsString(isoDateTime)
     }
-    DataTable(
-      List(
-        Column("A", "Time", "number"),
-        Column("B", "Value", "number")),
-      data)
+    def read(value: JsValue): Timestamp = value match {
+      case JsString(v) =>
+        val isoDateTime = LocalDateTime.parse(v, DateTimeFormatter.ISO_DATE_TIME)
+        Timestamp.valueOf(isoDateTime)
+      case _ => throw new DeserializationException("Cannot parse timestamp value")
+    }
   }
+
+  implicit val logFormat = jsonFormat2(Log)
 }

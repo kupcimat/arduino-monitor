@@ -1,5 +1,7 @@
 package org.kupcimat
 
+import java.sql.Timestamp
+
 import org.kupcimat.JsonSupport._
 import org.specs2.mutable.Specification
 import spray.http._
@@ -12,21 +14,21 @@ class LogServiceTest extends Specification with Specs2RouteTest with LogService 
   // TODO make proper tests with mocked db
   "LogService" should {
 
-    "return all logs in standard json format with GET request" in {
+    "return all logs with GET request" in {
       Get("/logs") ~> logRoute ~> check {
         status mustEqual StatusCodes.OK
       }
     }
 
-    "return all logs in DataTable json format with GET request" in {
-      Get("/logs?type=dataTable") ~> logRoute ~> check {
-        status mustEqual StatusCodes.OK
+    "create new log with POST request" in {
+      Post("/logs", Log(new Timestamp(0L), 42)) ~> logRoute ~> check {
+        status mustEqual StatusCodes.Created
       }
     }
 
-    "create new log with POST request" in {
-      Post("/logs", Log("2015-05-25", 42)) ~> logRoute ~> check {
-        status mustEqual StatusCodes.Created
+    "delete all logs with DELETE request" in {
+      Delete("/logs") ~> logRoute ~> check {
+        status mustEqual StatusCodes.NoContent
       }
     }
   }

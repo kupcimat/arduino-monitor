@@ -13,9 +13,13 @@ class LogDao(connection: Connection) {
     // TODO find more elegant solution?
     var logs = List[Log]()
     while (result.next()) {
-      logs = Log(result.getString("timestamp"), result.getInt("value")) :: logs
+      logs = Log(result.getTimestamp("timestamp"), result.getInt("value")) :: logs
     }
     logs
+  }
+
+  def deleteAllLogs(): Unit = withStatement { statement =>
+    statement.executeUpdate("DELETE FROM log")
   }
 
   def withStatement[T](execution: Statement => T): T = {
