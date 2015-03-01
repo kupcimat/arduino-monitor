@@ -2,6 +2,8 @@ package org.kupcimat
 
 import java.sql.{Connection, DriverManager, Statement}
 
+import scala.collection.mutable.ListBuffer
+
 class LogDao(connection: Connection) {
 
   def saveLog(log: Log): Unit = withStatement { statement =>
@@ -10,12 +12,11 @@ class LogDao(connection: Connection) {
 
   def getAllLogs: List[Log] = withStatement { statement =>
     val result = statement.executeQuery("SELECT * FROM log ORDER BY timestamp DESC")
-    // TODO find more elegant solution?
-    var logs = List[Log]()
+    val logs = ListBuffer[Log]()
     while (result.next()) {
-      logs = Log(result.getTimestamp("timestamp"), result.getInt("value")) :: logs
+      logs += Log(result.getTimestamp("timestamp"), result.getInt("value"))
     }
-    logs
+    logs.toList
   }
 
   def deleteAllLogs(): Unit = withStatement { statement =>

@@ -17,11 +17,8 @@ class LogServiceActor extends Actor with LogService {
 trait LogService extends HttpService {
 
   val logDao = LogDao.create
-  val exceptionHandler = ExceptionHandler {
-    case e: Exception => complete(StatusCodes.InternalServerError, e.getMessage)
-  }
 
-  val logRoute: Route =
+  val logsRoute: Route =
     path("logs") {
       get {
         complete(logDao.getAllLogs)
@@ -40,15 +37,21 @@ trait LogService extends HttpService {
           StatusCodes.NoContent
         }
       }
-    } ~
+    }
+
+  val resourcesRoute: Route =
     path("") {
       getFromResource("web/index.html")
     } ~ {
       getFromResourceDirectory("web")
     }
 
+  val exceptionHandler = ExceptionHandler {
+    case e: Exception => complete(StatusCodes.InternalServerError, e.getMessage)
+  }
+
   val handledExceptionsRoute =
     handleExceptions(exceptionHandler) {
-      logRoute
+      logsRoute ~ resourcesRoute
     }
 }

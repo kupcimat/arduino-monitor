@@ -19,6 +19,7 @@ object JsonSupport extends DefaultJsonProtocol with SprayJsonSupport {
       val isoDateTime = timestamp.toLocalDateTime.format(DateTimeFormatter.ISO_DATE_TIME)
       JsString(isoDateTime)
     }
+
     def read(value: JsValue): Timestamp = value match {
       case JsString(v) =>
         val isoDateTime = LocalDateTime.parse(v, DateTimeFormatter.ISO_DATE_TIME)

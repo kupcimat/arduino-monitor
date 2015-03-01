@@ -15,19 +15,19 @@ class LogServiceTest extends Specification with Specs2RouteTest with LogService 
   "LogService" should {
 
     "return all logs with GET request" in {
-      Get("/logs") ~> logRoute ~> check {
+      Get("/logs") ~> logsRoute ~> check {
         status mustEqual StatusCodes.OK
       }
     }
 
     "create new log with POST request" in {
-      Post("/logs", Log(new Timestamp(0L), 42)) ~> logRoute ~> check {
+      Post("/logs", Log(new Timestamp(0L), 42)) ~> logsRoute ~> check {
         status mustEqual StatusCodes.Created
       }
     }
 
     "delete all logs with DELETE request" in {
-      Delete("/logs") ~> logRoute ~> check {
+      Delete("/logs") ~> logsRoute ~> check {
         status mustEqual StatusCodes.NoContent
       }
     }
