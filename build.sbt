@@ -1,5 +1,7 @@
 organization  := "org.kupcimat"
 
+name          := "arduino-monitor"
+
 version       := "0.1"
 
 scalaVersion  := "2.11.5"
@@ -16,10 +18,10 @@ libraryDependencies ++= {
     "io.spray"           %% "spray-testkit" % sprayVersion % "test",
     "com.typesafe.akka"  %% "akka-actor"    % akkaVersion,
     "com.typesafe.akka"  %% "akka-testkit"  % akkaVersion  % "test",
-    "com.typesafe.slick" %% "slick"         % "2.1.0",
-    "org.specs2"         %%  "specs2-core"  % "2.3.11"     % "test",
-    "com.h2database"     %   "h2"           % "1.4.185",
-    "org.slf4j"          %   "slf4j-nop"    % "1.6.4"
+    "com.typesafe"       %  "config"        % "1.2.1",
+    "com.h2database"     %  "h2"            % "1.4.185",
+    "org.slf4j"          %  "slf4j-nop"     % "1.6.4",
+    "org.specs2"         %% "specs2-core"   % "2.3.11"     % "test"
   )
 }
 
