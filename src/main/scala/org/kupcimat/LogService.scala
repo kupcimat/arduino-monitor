@@ -50,8 +50,7 @@ trait LogService extends HttpService {
     case e: Exception => complete(StatusCodes.InternalServerError, e.getMessage)
   }
 
-  val handledExceptionsRoute =
-    handleExceptions(exceptionHandler) {
-      logsRoute ~ resourcesRoute
-    }
+  val handledExceptionsRoute = handleExceptions(exceptionHandler) {
+    logsRoute ~ resourcesRoute
+  }
 }

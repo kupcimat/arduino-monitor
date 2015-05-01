@@ -15,8 +15,7 @@ function drawChart() {
 
     $.ajax({
         url: "/logs",
-        dataType: "json",
-        async: false
+        dataType: "json"
     }).done(function (logs) {
         var data = createDataTable(logs);
         chart.draw(data, options);
