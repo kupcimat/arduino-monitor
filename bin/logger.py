@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import time
 import json
 import serial
 from datetime import datetime
@@ -28,8 +29,8 @@ def log(serial_port, serial_speed):
   print('Starting Arduino logger on port {} with speed {}...'.format(serial_port, serial_speed))
   serial_terminal = serial.Serial(serial_port, serial_speed)
 
-  log_number = 0
   while True:
+    serial_terminal.write('get pot\n'.encode())
     line = serial_terminal.readline()
     if len(line.strip()) > 0:
       n = int(line.strip())
@@ -38,7 +39,7 @@ def log(serial_port, serial_speed):
 
       print('Sending sensor data: {}'.format(sensor_data))
       send_log('http://localhost:8080/logs', sensor_data)
-      log_number += 1
+      time.sleep(1)
 
   print('Closing serial port...')
   serial_terminal.close()
