@@ -13,7 +13,7 @@ import static org.apache.commons.lang3.Validate.notNull;
 public class LogDao {
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     public void saveLog(Log log) {
         notNull(log, "log cannot be null");

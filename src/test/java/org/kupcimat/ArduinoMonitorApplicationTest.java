@@ -9,7 +9,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ArduinoMonitorApplication.class)
 @WebAppConfiguration
-public class ArduinoMonitorApplicationTests {
+public class ArduinoMonitorApplicationTest {
 
     @Test
     public void contextLoads() {

@@ -16,7 +16,7 @@ import java.util.List;
 public class LogController {
 
     @Autowired
-    LogDao logDao;
+    private LogDao logDao;
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity createLog(@RequestBody Log log) {
