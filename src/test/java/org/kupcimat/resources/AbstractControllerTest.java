@@ -40,7 +40,7 @@ public class AbstractControllerTest {
     }
 
     /**
-     * Deserialize json string to object of type clazz.
+     * Deserialize json string to object of selected class.
      */
     protected <T> T deserialize(String value, Class<T> clazz) throws IOException {
         return objectMapper.readValue(value, clazz);

@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 
 import java.sql.Timestamp;
 
+import static java.util.Collections.singletonMap;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -13,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class LogControllerTest extends AbstractControllerTest {
 
-    private static final Log LOG = new Log(new Timestamp(1), 1.0);
+    private static final Log LOG = new Log(new Timestamp(1), singletonMap("value", 1.0));
 
     @Test
     public void createLog() throws Exception {
