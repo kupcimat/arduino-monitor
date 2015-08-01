@@ -31,6 +31,12 @@ public class LogControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    public void getSelectedLogs() throws Exception {
+        mockMvc.perform(get("/logs/type"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void deleteLogs() throws Exception {
         mockMvc.perform(delete("/logs"))
                 .andExpect(status().isNoContent());

@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Collections.singletonMap;
+import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.Validate.notEmpty;
 import static org.apache.commons.lang3.Validate.notNull;
 
 @Service
@@ -38,6 +41,14 @@ public class LogDao {
                 () -> jdbcTemplate.query("SELECT * FROM log ORDER BY timestamp DESC",
                         (rs, rowNum) -> new Log(rs.getTimestamp("timestamp"), deserializeValues(rs.getString("values"))))
         );
+    }
+
+    public List<Log> getAllLogs(String logType) {
+        notEmpty(logType, "logType cannot be empty");
+        return getAllLogs().stream()
+                .filter(log -> log.getValues().containsKey(logType))
+                .map(log -> new Log(log.getTimestamp(), singletonMap(logType, log.getValues().get(logType))))
+                .collect(toList());
     }
 
     public void deleteAllLogs() {
