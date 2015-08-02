@@ -15,6 +15,7 @@ import java.util.Map;
 
 import static java.util.Collections.singletonMap;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.Validate.isTrue;
 import static org.apache.commons.lang3.Validate.notEmpty;
 import static org.apache.commons.lang3.Validate.notNull;
 
@@ -31,21 +32,25 @@ public class LogDao {
 
     public void saveLog(Log log) {
         notNull(log, "log cannot be null");
+
         metricHelper.time("db.save_log",
                 () -> jdbcTemplate.update("INSERT INTO log VALUES (?,?)", log.getTimestamp(), serializeValues(log.getValues()))
         );
     }
 
-    public List<Log> getAllLogs() {
+    public List<Log> getAllLogs(int limit) {
+        isTrue(limit > 0, "limit must be greater than 0");
+
         return metricHelper.time("db.get_all_logs",
-                () -> jdbcTemplate.query("SELECT * FROM log ORDER BY timestamp DESC",
+                () -> jdbcTemplate.query("SELECT * FROM log ORDER BY timestamp DESC LIMIT " + limit,
                         (rs, rowNum) -> new Log(rs.getTimestamp("timestamp"), deserializeValues(rs.getString("values"))))
         );
     }
 
-    public List<Log> getAllLogs(String logType) {
+    public List<Log> getAllLogs(String logType, int limit) {
         notEmpty(logType, "logType cannot be empty");
-        return getAllLogs().stream()
+
+        return getAllLogs(limit).stream()
                 .filter(log -> log.getValues().containsKey(logType))
                 .map(log -> new Log(log.getTimestamp(), singletonMap(logType, log.getValues().get(logType))))
                 .collect(toList());
