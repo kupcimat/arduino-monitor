@@ -23,7 +23,7 @@ public class ArduinoMonitorApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("Create log table status=start");
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS log (timestamp TIMESTAMP, value NUMERIC)");
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS log (timestamp TIMESTAMP, values VARCHAR(256))");
         log.info("Create log table status=finish");
     }
 }
