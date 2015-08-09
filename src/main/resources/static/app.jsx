@@ -63,8 +63,9 @@ var LogRow = React.createClass({
 // render log tables
 React.render(
     <div>
-        <LogTable url={'http://localhost:8080/logs'} logType={'temperature'} limit={5} pollInterval={2000}/>
-        <LogTable url={'http://localhost:8080/logs'} logType={'humidity'} limit={5} pollInterval={2000}/>
+        <LogTable url={'/logs'} logType={'temperature'} limit={5} pollInterval={2000}/>
+        <LogTable url={'/logs'} logType={'humidity'} limit={5} pollInterval={2000}/>
+        <LogTable url={'/logs'} logType={'pot'} limit={5} pollInterval={2000}/>
     </div>,
     document.getElementById('content')
 );
