@@ -7,3 +7,6 @@ target/
 # idea specific
 .idea/
 *.iml
+
+# fabric specific
+*.pyc
