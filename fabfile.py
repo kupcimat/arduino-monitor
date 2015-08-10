@@ -10,7 +10,7 @@ def run():
 
 
 @task
-def deploy_openshift(openshift_app_name='monitoring'):
+def deploy(openshift_app_name='monitoring'):
     """
     Build and deploy arduino monitor to openshift.
     :param openshift_app_name:
