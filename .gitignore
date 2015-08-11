@@ -1,12 +1,17 @@
 *.class
+*.pyc
 *.log
+*.min.js
 
 # mvn specific
 target/
 
+# grunt specific
+dist/
+
+# npm specific
+node_modules/
+
 # idea specific
 .idea/
 *.iml
-
-# fabric specific
-*.pyc
