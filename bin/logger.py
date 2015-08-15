@@ -44,12 +44,13 @@ def compute_pot(V_measured):
     return (V_measured / 1023) * 100
 
 
-def create_log(temperature, humidity, pot):
+def create_log(temperature, humidity, light, pot):
     json_data = json.dumps({
         'timestamp': datetime.utcnow().isoformat(),
         'values': {
             'temperature': temperature,
             'humidity': humidity,
+            'light': light,
             'pot': pot
         }})
     return json_data.encode('utf8')
@@ -77,9 +78,10 @@ def log(serial_port, serial_speed):
     while True:
         temperature = compute_temperature(query_arduino('get temperature', serial_connection))
         humidity = compute_humidity(query_arduino('get humidity', serial_connection))
+        light = compute_pot(query_arduino('get light', serial_connection))
         pot = compute_pot(query_arduino('get pot', serial_connection))
 
-        sensor_data = create_log(temperature, humidity, pot)
+        sensor_data = create_log(temperature, humidity, light, pot)
 
         print('Sending sensor data: {}'.format(sensor_data))
         send_log('http://localhost:8080/logs', sensor_data)

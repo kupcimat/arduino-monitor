@@ -7,12 +7,14 @@ char   MSG_DELIMITER = '\n';
 String MSG_GET_POT   = "get pot";
 String MSG_GET_TEMP  = "get temperature";
 String MSG_GET_HUMI  = "get humidity";
+String MSG_GET_LIGHT = "get light";
 String MSG_INVALID   = "-1";
 
 // sensors
 int POT_SENSOR = A0;
 int TEMP_SENSOR = A1;
 int HUMI_SENSOR = A2;
+int LIGHT_SENSOR = A3;
 
 void setup() {
   // initialize serial and wait for port to open
@@ -35,6 +37,9 @@ void loop() {
 
     } else if (request.equals(MSG_GET_HUMI)) {
       Serial.println(analogRead(HUMI_SENSOR));
+
+    } else if (request.equals(MSG_GET_LIGHT)) {
+      Serial.println(analogRead(LIGHT_SENSOR));
 
     } else {
       // return -1 for invalid request
