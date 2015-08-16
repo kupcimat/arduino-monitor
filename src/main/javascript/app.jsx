@@ -29,13 +29,17 @@ var LogTable = React.createClass({
         }.bind(this));
 
         return (
-            <table>
+            <table className="table table-condensed table-hover">
+                <thead>
                 <tr>
-                    <td>Timestamp</td>
-                    <td>{this.props.logType}</td>
-                    <td></td>
+                    <th>Timestamp</th>
+                    <th>{this.props.logType}</th>
+                    <th></th>
                 </tr>
+                </thead>
+                <tbody>
                 {rows}
+                </tbody>
             </table>
         );
     }
@@ -63,9 +67,21 @@ var LogRow = React.createClass({
 // render log tables
 React.render(
     <div>
-        <LogTable url={'/logs'} logType={'temperature'} limit={5} pollInterval={2000}/>
-        <LogTable url={'/logs'} logType={'humidity'} limit={5} pollInterval={2000}/>
-        <LogTable url={'/logs'} logType={'pot'} limit={5} pollInterval={2000}/>
+        <div className="row">
+            <div className="col-md-12">
+                <LogTable url={'/logs'} logType={'temperature'} limit={5} pollInterval={2000}/>
+            </div>
+        </div>
+        <div className="row">
+            <div className="col-md-12">
+                <LogTable url={'/logs'} logType={'humidity'} limit={5} pollInterval={2000}/>
+            </div>
+        </div>
+        <div className="row">
+            <div className="col-md-12">
+                <LogTable url={'/logs'} logType={'light'} limit={5} pollInterval={2000}/>
+            </div>
+        </div>
     </div>,
-    document.getElementById('content')
+    document.getElementById('app')
 );
