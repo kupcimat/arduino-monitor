@@ -1,32 +1,36 @@
-var LogTable = React.createClass({
+import $ from 'jquery';
+import React from 'react';
 
-    loadLogsFromServer: function () {
+class LogTable extends React.Component {
+
+    constructor() {
+        super();
+        this.state = {data: []};
+    }
+
+    loadLogsFromServer() {
         $.ajax({
-            url: this.props.url + '/' + this.props.logType + '?limit=' + this.props.limit,
+            url: `${this.props.url}/${this.props.logType}?limit=${this.props.limit}`,
             cache: false,
             dataType: 'json',
-            success: function (data) {
+            success: (data) => {
                 this.setState({data: data});
-            }.bind(this),
-            error: function (xhr, status, error) {
+            },
+            error: (xhr, status, error) => {
                 console.error(this.props.url, status, error);
-            }.bind(this)
+            }
         });
-    },
+    }
 
-    getInitialState: function () {
-        return {data: []};
-    },
-
-    componentDidMount: function () {
+    componentDidMount() {
         this.loadLogsFromServer();
-        setInterval(this.loadLogsFromServer, this.props.pollInterval);
-    },
+        setInterval(this.loadLogsFromServer.bind(this), this.props.pollInterval);
+    }
 
-    render: function () {
-        var rows = this.state.data.map(function (log) {
-            return <LogRow log={log} logType={this.props.logType}/>
-        }.bind(this));
+    render() {
+        const rows = this.state.data.map(log =>
+                <LogRow log={log} logType={this.props.logType}/>
+        );
 
         return (
             <table className="table table-condensed table-hover">
@@ -43,11 +47,11 @@ var LogTable = React.createClass({
             </table>
         );
     }
-});
+}
 
-var LogRow = React.createClass({
+class LogRow extends React.Component {
 
-    render: function () {
+    render() {
         // TODO replace with real chart
         var bars = "";
         for (var i = 0; i < this.props.log.values[this.props.logType]; i++) {
@@ -62,7 +66,7 @@ var LogRow = React.createClass({
             </tr>
         );
     }
-});
+}
 
 // render log tables
 React.render(

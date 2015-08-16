@@ -1,24 +1,35 @@
 module.exports = function (grunt) {
 
     // load grunt plugins
-    grunt.loadNpmTasks('grunt-react');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
+    require('load-grunt-tasks')(grunt);
 
     // project configuration
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
         clean: {
-            build: {
+            dist: {
                 src: ['dist', 'src/main/resources/static/*.min.js']
             }
         },
 
-        react: {
-            build: {
+        babel: {
+            dist: {
                 files: {
                     'dist/app.js': ['src/main/javascript/app.jsx']
+                }
+            }
+        },
+
+        browserify: {
+            dist: {
+                files: {
+                    'dist/bundle.js': ['dist/app.js']
+                }
+            },
+            dev: {
+                files: {
+                    'src/main/resources/static/app.min.js': ['dist/app.js']
                 }
             }
         },
@@ -27,15 +38,16 @@ module.exports = function (grunt) {
             options: {
                 banner: '/*! <%= pkg.name %> (<%= pkg.version %>) <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
-            build: {
+            dist: {
                 files: {
-                    'src/main/resources/static/app.min.js': ['dist/app.js']
+                    'src/main/resources/static/app.min.js': ['dist/bundle.js']
                 }
             }
         }
     });
 
     // define grunt tasks
-    grunt.registerTask('dist', ['react', 'uglify']);
+    grunt.registerTask('dev', ['babel', 'browserify:dev']);
+    grunt.registerTask('dist', ['babel', 'browserify:dist', 'uglify']);
 
 };

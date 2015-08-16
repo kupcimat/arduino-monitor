@@ -6,6 +6,7 @@ def run():
     """
     Run arduino monitor locally.
     """
+    local('grunt clean dev')
     local('mvn spring-boot:run')
 
 
