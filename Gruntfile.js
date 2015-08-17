@@ -16,21 +16,22 @@ module.exports = function (grunt) {
         babel: {
             dist: {
                 files: {
-                    'dist/app.js': ['src/main/javascript/app.jsx']
+                    'dist/components/Index.js': 'src/main/javascript/components/Index.jsx',
+                    'dist/components/LogRow.js': 'src/main/javascript/components/LogRow.jsx',
+                    'dist/components/LogTable.js': 'src/main/javascript/components/LogTable.jsx',
+                    'dist/utils/api.js': 'src/main/javascript/utils/api.js'
                 }
             }
         },
 
         browserify: {
             dist: {
-                files: {
-                    'dist/bundle.js': ['dist/app.js']
-                }
+                src: 'dist/**/*.js',
+                dest: 'dist/bundle.js'
             },
             dev: {
-                files: {
-                    'src/main/resources/static/app.min.js': ['dist/app.js']
-                }
+                src: 'dist/**/*.js',
+                dest: 'src/main/resources/static/app.min.js'
             }
         },
 
@@ -39,9 +40,8 @@ module.exports = function (grunt) {
                 banner: '/*! <%= pkg.name %> (<%= pkg.version %>) <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
             dist: {
-                files: {
-                    'src/main/resources/static/app.min.js': ['dist/bundle.js']
-                }
+                src: 'dist/bundle.js',
+                dest: 'src/main/resources/static/app.min.js'
             }
         }
     });
