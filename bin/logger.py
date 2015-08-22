@@ -52,7 +52,8 @@ def create_log(temperature, humidity, light, pot):
             'humidity': humidity,
             'light': light,
             'pot': pot
-        }})
+        }
+    })
     return json_data.encode('utf8')
 
 
@@ -69,7 +70,7 @@ def query_arduino(query, serial_connection):
     return int(response.strip())
 
 
-def log(serial_port, serial_speed):
+def log(serial_port, serial_speed, arduino_monitor='localhost:8080', sleep_time=2):
     """Log sensor values using serial port"""
 
     print('Starting Arduino logger on port {} with speed {}...'.format(serial_port, serial_speed))
@@ -84,11 +85,19 @@ def log(serial_port, serial_speed):
         sensor_data = create_log(temperature, humidity, light, pot)
 
         print('Sending sensor data: {}'.format(sensor_data))
-        send_log('http://localhost:8080/logs', sensor_data)
-        time.sleep(2)
+        send_log('http://{}/logs'.format(arduino_monitor), sensor_data)
+        time.sleep(sleep_time)
 
     print('Closing serial port...')
     serial_connection.close()
 
-# main
-log('/dev/ttyACM0', 9600)
+
+if __name__ == '__main__':
+    import sys
+
+    if len(sys.argv) >= 3:
+        log('/dev/ttyACM0', 9600, sys.argv[1], int(sys.argv[2]))
+    elif len(sys.argv) == 2:
+        log('/dev/ttyACM0', 9600, sys.argv[1])
+    else:
+        log('/dev/ttyACM0', 9600)
