@@ -1,25 +1,37 @@
 module.exports = function (grunt) {
 
     // load grunt plugins
-    grunt.loadNpmTasks('grunt-react');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
+    require('load-grunt-tasks')(grunt);
 
     // project configuration
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
         clean: {
-            build: {
+            dist: {
                 src: ['dist', 'src/main/resources/static/*.min.js']
             }
         },
 
-        react: {
-            build: {
+        babel: {
+            dist: {
                 files: {
-                    'dist/app.js': ['src/main/javascript/app.jsx']
+                    'dist/components/Index.js': 'src/main/javascript/components/Index.jsx',
+                    'dist/components/LogRow.js': 'src/main/javascript/components/LogRow.jsx',
+                    'dist/components/LogTable.js': 'src/main/javascript/components/LogTable.jsx',
+                    'dist/utils/api.js': 'src/main/javascript/utils/api.js'
                 }
+            }
+        },
+
+        browserify: {
+            dist: {
+                src: 'dist/**/*.js',
+                dest: 'dist/bundle.js'
+            },
+            dev: {
+                src: 'dist/**/*.js',
+                dest: 'src/main/resources/static/app.min.js'
             }
         },
 
@@ -27,15 +39,15 @@ module.exports = function (grunt) {
             options: {
                 banner: '/*! <%= pkg.name %> (<%= pkg.version %>) <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
-            build: {
-                files: {
-                    'src/main/resources/static/app.min.js': ['dist/app.js']
-                }
+            dist: {
+                src: 'dist/bundle.js',
+                dest: 'src/main/resources/static/app.min.js'
             }
         }
     });
 
     // define grunt tasks
-    grunt.registerTask('dist', ['react', 'uglify']);
+    grunt.registerTask('dev', ['babel', 'browserify:dev']);
+    grunt.registerTask('dist', ['babel', 'browserify:dist', 'uglify']);
 
 };
