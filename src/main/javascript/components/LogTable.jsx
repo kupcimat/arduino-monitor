@@ -1,5 +1,4 @@
 import React from 'react';
-import LogRow from './LogRow';
 import { fetchLogs } from '../utils/api';
 
 export default class LogTable extends React.Component {
@@ -22,23 +21,32 @@ export default class LogTable extends React.Component {
     }
 
     render() {
-        const rows = this.state.data.map(
-                log => <LogRow log={log} logType={this.props.logType}/>
-        );
-
         return (
             <table className="table table-condensed table-hover">
                 <thead>
                 <tr>
                     <th>Timestamp</th>
                     <th>{this.props.logType}</th>
-                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                {rows}
+                {this.state.data.map(log =>
+                        <LogRow log={log} logType={this.props.logType}/>
+                )}
                 </tbody>
             </table>
+        );
+    }
+}
+
+class LogRow extends React.Component {
+
+    render() {
+        return (
+            <tr>
+                <td>{this.props.log.timestamp}</td>
+                <td>{this.props.log.values[this.props.logType]}</td>
+            </tr>
         );
     }
 }
