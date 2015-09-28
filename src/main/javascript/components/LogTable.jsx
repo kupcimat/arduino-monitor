@@ -1,5 +1,9 @@
 import React from 'react';
-import { capitalizeFirstLetter } from '../utils/util';
+import {
+    formatDate,
+    formatTime,
+    capitalizeFirstLetter
+} from '../utils/util';
 
 export default class LogTable extends React.Component {
 
@@ -8,7 +12,8 @@ export default class LogTable extends React.Component {
             <table className="table table-condensed table-hover">
                 <thead>
                 <tr>
-                    <th>Timestamp</th>
+                    <th>Date</th>
+                    <th>Time</th>
                     <th>{capitalizeFirstLetter(this.props.logType)}</th>
                 </tr>
                 </thead>
@@ -27,7 +32,8 @@ class LogRow extends React.Component {
     render() {
         return (
             <tr>
-                <td>{this.props.log.timestamp}</td>
+                <td>{formatDate(this.props.log.timestamp)}</td>
+                <td>{formatTime(this.props.log.timestamp)}</td>
                 <td>{this.props.log.values[this.props.logType]}</td>
             </tr>
         );
