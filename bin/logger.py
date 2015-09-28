@@ -70,11 +70,11 @@ def query_arduino(query, serial_connection):
     return int(response.strip())
 
 
-def log(serial_port, serial_speed, arduino_monitor='localhost:8080', sleep_time=2):
+def log(serial_port, arduino_monitor='localhost:8080', sleep_time=2):
     """Log sensor values using serial port"""
 
-    print('Starting Arduino logger on port {} with speed {}...'.format(serial_port, serial_speed))
-    serial_connection = serial.Serial(serial_port, serial_speed)
+    print('Starting Arduino logger on port {} with speed 9600...'.format(serial_port))
+    serial_connection = serial.Serial(serial_port, 9600)
 
     while True:
         temperature = compute_temperature(query_arduino('get temperature', serial_connection))
@@ -95,9 +95,11 @@ def log(serial_port, serial_speed, arduino_monitor='localhost:8080', sleep_time=
 if __name__ == '__main__':
     import sys
 
-    if len(sys.argv) >= 3:
-        log('/dev/ttyACM0', 9600, sys.argv[1], int(sys.argv[2]))
+    if len(sys.argv) >= 4:
+        log(sys.argv[1], sys.argv[2], int(sys.argv[3]))
+    elif len(sys.argv) == 3:
+        log(sys.argv[1], sys.argv[2])
     elif len(sys.argv) == 2:
-        log('/dev/ttyACM0', 9600, sys.argv[1])
+        log(sys.argv[1])
     else:
-        log('/dev/ttyACM0', 9600)
+        print('Usage: {} <serial-port> [<server:port>] [<report-interval>]'.format(sys.argv[0]))
