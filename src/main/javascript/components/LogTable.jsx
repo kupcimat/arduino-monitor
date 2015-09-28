@@ -1,24 +1,7 @@
 import React from 'react';
-import { fetchLogs } from '../utils/api';
+import { capitalizeFirstLetter } from '../utils/util';
 
 export default class LogTable extends React.Component {
-
-    constructor() {
-        super();
-        this.state = {data: []};
-    }
-
-    loadLogsFromServer() {
-        fetchLogs(this.props.logType, this.props.limit).then(
-            (data) => this.setState({data: data}),
-            (error) => console.error('Error fetching logs from server:', error)
-        )
-    }
-
-    componentDidMount() {
-        this.loadLogsFromServer();
-        setInterval(this.loadLogsFromServer.bind(this), this.props.pollInterval);
-    }
 
     render() {
         return (
@@ -26,11 +9,11 @@ export default class LogTable extends React.Component {
                 <thead>
                 <tr>
                     <th>Timestamp</th>
-                    <th>{this.props.logType}</th>
+                    <th>{capitalizeFirstLetter(this.props.logType)}</th>
                 </tr>
                 </thead>
                 <tbody>
-                {this.state.data.map(log =>
+                {this.props.data.map(log =>
                         <LogRow log={log} logType={this.props.logType}/>
                 )}
                 </tbody>

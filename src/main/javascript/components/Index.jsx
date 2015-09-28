@@ -1,32 +1,14 @@
 import React from 'react';
-import LogTable from './LogTable';
+import SensorReport from './SensorReport';
 
 export default class Index extends React.Component {
 
     render() {
         return (
-            <div>
-                <div className="row">
-                    <div className="col-md-12">
-                        <LogTable logType={'temperature'}
-                                  limit={this.props.limit}
-                                  pollInterval={this.props.pollInterval}/>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md-12">
-                        <LogTable logType={'humidity'}
-                                  limit={this.props.limit}
-                                  pollInterval={this.props.pollInterval}/>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md-12">
-                        <LogTable logType={'light'}
-                                  limit={this.props.limit}
-                                  pollInterval={this.props.pollInterval}/>
-                    </div>
-                </div>
+            <div className="list-group">
+                <SensorReport logType={'temperature'} limit={this.props.limit} pollInterval={this.props.pollInterval}/>
+                <SensorReport logType={'humidity'} limit={this.props.limit} pollInterval={this.props.pollInterval}/>
+                <SensorReport logType={'light'} limit={this.props.limit} pollInterval={this.props.pollInterval}/>
             </div>
         );
     }
@@ -34,6 +16,6 @@ export default class Index extends React.Component {
 
 // render Index
 React.render(
-    <Index limit={5} pollInterval={2000}/>,
+    <Index limit={10} pollInterval={2000}/>,
     document.getElementById('app')
 );
