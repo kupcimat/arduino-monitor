@@ -1,5 +1,9 @@
 import $ from 'jquery';
 
+export function getLogValues(logType, data) {
+    return data.map(log => log.values[logType]);
+}
+
 export function fetchLogs(logType, limit) {
     return wrapjQueryPromise($.ajax({
         url: `/logs/${logType}?limit=${limit}`,

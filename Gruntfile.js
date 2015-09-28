@@ -17,9 +17,10 @@ module.exports = function (grunt) {
             dist: {
                 files: {
                     'dist/components/Index.js': 'src/main/javascript/components/Index.jsx',
-                    'dist/components/LogRow.js': 'src/main/javascript/components/LogRow.jsx',
                     'dist/components/LogTable.js': 'src/main/javascript/components/LogTable.jsx',
-                    'dist/utils/api.js': 'src/main/javascript/utils/api.js'
+                    'dist/components/SensorReport.js': 'src/main/javascript/components/SensorReport.jsx',
+                    'dist/utils/api.js': 'src/main/javascript/utils/api.js',
+                    'dist/utils/util.js': 'src/main/javascript/utils/util.js'
                 }
             }
         },
