@@ -21,7 +21,8 @@ def deploy(openshift_app_name='monitoring'):
     local_file = 'target/arduino-monitor-*.war'
     remote_file = 'wildfly/standalone/deployments/ROOT.war'
 
-    build_war()
+    local('grunt clean dist')
+    local('mvn clean package')
     local('rhc scp {openshift_app_name} upload {local_file} {remote_file}'.format(
         openshift_app_name=openshift_app_name, local_file=local_file, remote_file=remote_file))
     # run health-check
@@ -45,8 +46,3 @@ def test_remote(openshift_app_name='monitoring'):
     """
     local('python3 bin/logger_mock.py {openshift_app_name}-kupcimat.rhcloud.com'.format(
         openshift_app_name=openshift_app_name))
-
-
-def build_war():
-    local('grunt clean dist')
-    local('mvn clean package')
