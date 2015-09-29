@@ -2,6 +2,7 @@ import React from 'react';
 import {
     formatDate,
     formatTime,
+    formatLogValue,
     capitalizeFirstLetter
 } from '../utils/util';
 
@@ -34,7 +35,7 @@ class LogRow extends React.Component {
             <tr>
                 <td>{formatDate(this.props.log.timestamp)}</td>
                 <td>{formatTime(this.props.log.timestamp)}</td>
-                <td>{this.props.log.values[this.props.logType]}</td>
+                <td>{formatLogValue(this.props.logType, this.props.log.values[this.props.logType])}</td>
             </tr>
         );
     }

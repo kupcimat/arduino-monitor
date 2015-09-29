@@ -9,7 +9,7 @@ from logger import send_log
 
 def send_random_logs(arduino_monitor='localhost:8080', sleep_time=2):
     for i in range(10):
-        random_value = random.randint(0, 100)
+        random_value = random.uniform(0, 100)
         mock_data = create_log(random_value, random_value, random_value, random_value)
 
         print('Sending mock data to {}... {}'.format(arduino_monitor, (10 - i)))
