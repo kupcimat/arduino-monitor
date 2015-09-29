@@ -39,7 +39,7 @@ export default class SensorReport extends React.Component {
         return (
             <div>
                 <h4>{capitalizeFirstLetter(this.props.logType)}</h4>
-                <Sparklines data={getLogValues(this.props.logType, this.state.data)} limit={this.props.limit}>
+                <Sparklines data={getLogValues(this.props.logType, this.state.data).reverse()} limit={this.props.limit}>
                     <SparklinesLine/>
                     <SparklinesSpots/>
                 </Sparklines>
