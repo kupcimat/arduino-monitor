@@ -5,16 +5,19 @@ import numpy as np
 # constants
 KELVIN_ZERO = 273.15
 
+
 def steinhart_value(coefficients, R):
     model = np.array([1, np.log(R), np.log(R)**3])
     T_inv = np.dot(coefficients, model)
     return 1/T_inv - KELVIN_ZERO
+
 
 def compute_R(V_measured):
     V_in = 5
     V_out = V_measured/1024 * V_in
     R_constant = 50000
     return R_constant * (V_in/V_out - 1)
+
 
 # measured values
 R = np.array([170291, 50000, 16421])
