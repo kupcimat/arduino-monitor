@@ -77,15 +77,18 @@ def log(serial_port, arduino_monitor='localhost:8080', sleep_time=2):
     serial_connection = serial.Serial(serial_port, 9600)
 
     while True:
-        temperature = compute_temperature(query_arduino('get temperature', serial_connection))
-        humidity = compute_humidity(query_arduino('get humidity', serial_connection))
-        light = compute_pot(query_arduino('get light', serial_connection))
-        pot = compute_pot(query_arduino('get pot', serial_connection))
+        try:
+            temperature = compute_temperature(query_arduino('get temperature', serial_connection))
+            humidity = compute_humidity(query_arduino('get humidity', serial_connection))
+            light = compute_pot(query_arduino('get light', serial_connection))
+            pot = compute_pot(query_arduino('get pot', serial_connection))
 
-        sensor_data = create_log(temperature, humidity, light, pot)
+            sensor_data = create_log(temperature, humidity, light, pot)
+            send_log('http://{}/logs'.format(arduino_monitor), sensor_data)
 
-        print('Sending sensor data: {}'.format(sensor_data))
-        send_log('http://{}/logs'.format(arduino_monitor), sensor_data)
+            print('Sending sensor data: {}'.format(sensor_data))
+        except Exception as e:
+            print('Could not send sensor data: {}'.format(e))
         time.sleep(sleep_time)
 
     print('Closing serial port...')
